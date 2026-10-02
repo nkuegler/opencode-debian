@@ -1,0 +1,62 @@
+### define variables
+export CBSIT=1
+export SAIA_API_KEY="<add-your-API-key>"
+
+### check if software directory can be reached (checking for u_kuegler_software)
+## If available, different functionalities are sourced from the software directory
+software_dir="/data/u_kuegler_software"
+$HOME/trymount -t 100 $software_dir
+if [ $? -ne 0 ]; then
+	echo "$software_dir not available"
+else
+	### make sure that each of these files has execute permissions (700)!!
+	# source ~/.bashrc.conda
+	source ~/.bashrc.ohMyPosh
+	# source ~/.bashrc.singularity 
+	# source ~/.bashrc.opencode
+fi
+
+### define aliases to activate storage drive dependent software manually
+## (e.g., conda, singularity, oh-my-posh) 
+alias con="source ~/.bashrc.conda" # activate conda
+alias sing="source ~/.bashrc.singularity" # make custom singularity containers available -> will break the sc function
+alias qsmxtenv="source ~/.bashrc.qsmxt" # addition to QSMxT v8 using conda
+alias qsmxtrs="source ~/.bashrc.qsmxtrs" # make QSMxT v9 (Rust implementation available)
+alias runoc="source ~/.bashrc.opencode" # make run-opencode command available -> Run opencode in custom singularity container
+
+### define aliases to run certain commands
+alias ollama="/data/u_kuegler_software/ollama/bin/ollama"
+alias jlabtut="mamba activate bidsme; cd /data/tu_kuegler/bidsme_tutorial; jupyter lab ."
+alias jlabironsl="mamba activate bidsme; cd /data/u_kuegler_software/git/MPM_bidsification; jupyter lab ."
+alias jlabrelax="mamba activate relax_sim; cd /data/u_kuegler_software/git/relaxation_toy_model; jupyter lab ."
+alias gl="/data/u_kuegler_software/MRIcroGL/MRIcroGL"
+alias vscode="/data/u_kuegler_software/VSCode-linux-x64/code"
+alias zot="nohup /data/u_kuegler_software/Zotero_linux-x86_64/zotero > /dev/null 2>&1 &"
+alias files="xdg-open"
+alias apple="set-keyboard-layout -k apple -l de"
+alias ll='ls --color -l -h'
+alias la='ls --color -a'
+alias lla='ls --color -la -h'
+
+alias cd..='cd ..'
+alias ..='cd ..'
+
+
+### Github CLI commands
+alias exp="gh copilot explain"
+alias sug="gh copilot suggest"
+
+### define path shortcuts
+shopt -s cdable_vars
+export gitdir=/data/u_kuegler_software/git
+export ironsleep=/data/pt_02262/data/TH_bids
+export alinadata=/data/p_03002/data
+export agadata=/data/pt_np-burzynska
+export infantdata=/data/p_03037
+export xalddata=/data/pt_03068/data/in_vivo
+export liegedata=/data/pt_02262/data/liege_data
+export histopark=/data/pt_03187/data/in_vivo
+export br=/data/p_works-council
+export scidir=/data/pt_np-kuegler
+
+. "$HOME/.local/bin/env"

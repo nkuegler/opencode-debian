@@ -1,0 +1,16 @@
+Bootstrap: docker
+From: node:20-slim
+
+%environment
+    export WORKSPACE=/workspace
+
+%post
+    # Install OpenCode globally via npm
+    npm install -g opencode-ai
+
+    # Create working directory
+    mkdir -p /workspace
+
+%runscript
+    cd /workspace
+    exec opencode "$@"

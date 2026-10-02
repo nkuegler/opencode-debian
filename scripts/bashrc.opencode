@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Make run-opencode available as shell function.
+# The function spins up a container running opencode inside.
+
+## Check if singularity container file exists
+OPENCODE_SIF="/data/u_kuegler_software/opencode-debian/opencode.sif"
+if [ -f "$OPENCODE_SIF" ]; then
+  VALID_OC_CONTAINER=true
+else
+  VALID_OC_CONTAINER=false
+  echo "Opencode singularity container not available. Skipping definition of run-opencode()."
+fi
+
+## Check if SAIA_API_KEY is defined
+if [ -n "${SAIA_API_KEY}" ]; then
+  VALID_API=true
+else
+  VALID_API=false
+  echo "SAIA_API_KEY not defined or empty. Skipping definition of run-opencode()."
+fi
+
+## Define relevant binds within the home directory, as home directory is excluded in the container
+binds=(
+  "-B ${HOME}/.cache:${HOME}/.cache"
+  "-B ${HOME}/.config:${HOME}/.config"
+  "-B ${HOME}/.local:${HOME}/.local"
+)
+
+## Define run-opencode() function or a placeholder.
+if [ "$VALID_API" = true ] && [ "$VALID_OC_CONTAINER" = true ]; then
+  echo "Activating run-opencode command."
+  run-opencode() {
+    local extra_mount="${1:-}"
+
+    # Dynamically create the final bind array from the default binds
+    local mybinds=("${binds[@]}")
+    if [ -n "$extra_mount" ]; then
+      mybinds+=("-B ${extra_mount}:/other")
+    fi
+
+    singularity run \
+      --no-home \
+      --no-mount "/data" \
+      -B "$PWD":/workspace \
+      "${mybinds[@]}" \
+      -W /workspace \
+      --env HOME=/tmp,SAIA_API_KEY="$SAIA_API_KEY" \
+      "$OPENCODE_SIF" "$@"
+  }
+else
+  # Define a stub function to avoid "command not found" errors
+  run-opencode() {
+    echo "run-opencode: Function disabled because required environment variables are missing. Please check your ~/.bashrc !" >&2
+    return 1
+  }
+fi
