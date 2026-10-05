@@ -6,11 +6,10 @@ These installation instructions document how to build and run an OpenCode sandbo
 
 ---
 
-**Features of this sandbox container:** 
-
-- `/data` is not available in the container **(MOST IMPORTANT)**
-- home directory name (`$HOME`) is exactly the same in the container and outside but only explicitly specified directories (e.g., `~/.config`,`~/.cache`,`~/.local`) and files from it are available within the container
-    - if you want to automatically push to Github/Gitlab, you need to mount `~/.ssh/` or certain files of it but I would not recommend this approach.
+> [!NOTE] Features of this sandbox container:
+> - `/data` is not available in the container **(MOST IMPORTANT)**
+> - home directory name (`$HOME`) is exactly the same in the container and outside but only explicitly specified directories (e.g., `~/.config`,`~/.cache`,`~/.local`) and files from it are available within the container
+>     - if you want to automatically push to Github/Gitlab, you need to mount `~/.ssh/` or certain files of it but I would not recommend this approach.
 
 ### 1. Singularity definition file
 
